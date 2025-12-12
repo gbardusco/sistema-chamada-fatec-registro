@@ -25,7 +25,7 @@ A aplicação utiliza arquitetura **MVC (Model-View-Controller)** para garantir 
 O projeto foi refatorado para separar responsabilidades:
 
 ```text
-/chamada-dsm/
+/chamada/
 │
 ├── index.html           # Estrutura e Interface Principal
 ├── README.md            # Documentação do Projeto
