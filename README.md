@@ -46,11 +46,11 @@ O projeto foi refatorado para separar responsabilidades:
 
 ## 🎨 Identidade Visual
 
-[cite_start]O design segue as diretrizes oficiais do Centro Paula Souza[cite: 37]:
+O design segue as diretrizes oficiais do Centro Paula Souza:
 
-  * [cite_start]**Tipografia:** Fonte **Verdana** (Padrão de sistema oficial)[cite: 263, 760].
-  * [cite_start]**Cromia Principal:** Vermelho Institucional `#B20000` (Convertido de CMYK 0/100/100/30)[cite: 98, 541].
-  * [cite_start]**Layout:** Régua de logotipos com Brasão do Governo à direita e CPS à esquerda[cite: 780, 808].
+  * **Tipografia:** Fonte **Verdana** (Padrão de sistema oficial).
+  * **Cromia Principal:** Vermelho Institucional `#B20000` (Convertido de CMYK 0/100/100/30).
+  * **Layout:** Régua de logotipos com Brasão do Governo à direita e CPS à esquerda.
 
 ## 📦 Como Usar
 
