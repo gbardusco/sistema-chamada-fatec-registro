@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sistema de Chamada - Padrão CPS</title>
+
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <header class="cps-header">
+        <div class="header-container">
+            <img src="assets/img/logo_cps.png" alt="Centro Paula Souza" class="logo-cps">
+            <div class="header-title">
+                <h1>Sistema de Chamada</h1>
+                <span>Gestão Docente</span>
+            </div>
+            <img src="assets/img/logo_gov_sp.png" alt="Governo do Estado de São Paulo" class="logo-gov">
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="dbStatus" class="status-bar">Carregando sistema...</div>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="chamada">Realizar Chamada</button>
+            <button class="tab-btn" data-tab="historico">Histórico</button>
+            <button class="tab-btn" data-tab="config">Gestão de Alunos</button>
+        </nav>
+
+        <section id="tab-chamada" class="tab-content active">
+            <div class="card">
+                <div class="grid-4">
+                    <div class="input-group">
+                        <label>Data</label>
+                        <input type="date" id="chamadaData">
+                    </div>
+                    <div class="input-group">
+                        <label>Curso</label>
+                        <select id="chamadaCurso">
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Período</label>
+                        <select id="chamadaPeriodo">
+                            <option value="">Aguardando Curso...</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Tipo</label>
+                        <select id="chamadaTipo">
+                            <option value="Entrada">Entrada</option>
+                            <option value="Saída">Saída</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="list-controls">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="toggleAll">
+                        <span class="checkmark"></span>
+                        Selecionar Todos
+                    </label>
+                    <span id="counter" class="counter-badge">0 presentes</span>
+                </div>
+
+                <div id="studentListContainer" class="student-list">
+                    <div class="empty-state">Selecione Curso e Período para carregar.</div>
+                </div>
+
+                <div class="actions">
+                    <button id="btnSaveAttendance" class="btn btn-primary"><i class="fas fa-save"></i> Salvar
+                        Lista</button>
+                    <button id="btnCopyText" class="btn btn-outline"><i class="fas fa-copy"></i> Copiar Texto</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-historico" class="tab-content">
+            <div class="card">
+                <div class="grid-3">
+                    <div class="input-group">
+                        <label>Buscar</label>
+                        <input type="text" id="historySearch" placeholder="Data, tipo...">
+                    </div>
+                    <div class="input-group">
+                        <label>Filtrar Período</label>
+                        <select id="historyFilterPeriod">
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                    <div class="input-group flex-end">
+                        <button id="btnClearHistoryFilters" class="btn btn-outline full-width">Limpar Filtros</button>
+                    </div>
+                </div>
+                <div id="historyList" class="history-container"></div>
+            </div>
+        </section>
+
+        <section id="tab-config" class="tab-content">
+            <div class="card highlight-card">
+                <h3><i class="fas fa-file-import"></i> Importar Base</h3>
+                <div class="upload-controls">
+                    <input type="file" id="fileInput" accept=".csv, .xlsx, .xls, .json" />
+                    <button id="btnProcessFile" class="btn btn-primary">Carregar</button>
+                    <button id="btnClearDb" class="btn btn-danger">Zerar Tudo</button>
+                </div>
+                <small>Colunas obrigatórias: <strong>RA, NOME, CURSO, PERIODO</strong></small>
+            </div>
+
+            <div class="card">
+                <h3>Base de Dados</h3>
+                <div class="grid-3 mb-15">
+                    <div class="input-group">
+                        <label>Curso</label>
+                        <select id="manageCurso">
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Período</label>
+                        <select id="managePeriodo">
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Buscar</label>
+                        <input type="text" id="manageSearch" placeholder="Nome ou RA...">
+                    </div>
+                </div>
+
+                <div class="table-actions">
+                    <span id="dbSelectionCount">0 selecionados</span>
+                    <button id="btnDeleteBulk" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Excluir
+                        Selecionados</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th width="30"><input type="checkbox" id="checkAllDB"></th>
+                                <th>RA</th>
+                                <th>Nome</th>
+                                <th>Curso</th>
+                                <th>Período</th>
+                                <th class="text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="databaseTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="cps-footer">
+        <p>Centro Paula Souza - Governo do Estado de São Paulo</p>
+    </footer>
+
+    <script src="assets/js/model.js"></script>
+    <script src="assets/js/view.js"></script>
+    <script src="assets/js/controller.js"></script>
+</body>
+
+</html>

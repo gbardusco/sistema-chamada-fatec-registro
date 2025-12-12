@@ -1,0 +1,16 @@
+# --- Dados Sensíveis e Bases de Alunos ---
+# Ignora a pasta inteira 'alunos'
+alunos/
+
+# Ignora arquivos de dados soltos
+*.xlsx
+*.xls
+*.json
+
+# --- Arquivos de Sistema Operacional ---
+.DS_Store
+Thumbs.db
+
+# --- Configurações de Editor ---
+.vscode/
+.idea/
