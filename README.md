@@ -1,43 +1,57 @@
-# 📋 Sistema de Chamada - Padrão CPS
+# 📋 Sistema de Chamada - Padrão CPS (Fatec Registro)
 
-Este é um sistema de gestão de presença docente (SPA - Single Page Application) desenvolvido para facilitar a rotina de professores e coordenadores. O projeto foi desenhado seguindo rigorosamente o **Manual de Identidade Visual do Centro Paula Souza** (CPS).
+Este é um sistema de gestão de presença docente (SPA - Single Page Application) desenvolvido para facilitar a rotina de professores e coordenadores da Fatec Registro. O projeto segue rigorosamente o **Manual de Identidade Visual do Centro Paula Souza** (CPS).
 
 A aplicação utiliza arquitetura **MVC (Model-View-Controller)** para garantir organização, escalabilidade e facilidade de manutenção.
 
 ## 🚀 Funcionalidades
 
-  * **Gestão de Presença:** Listas separadas por **Entrada** e **Saída**.
-  * **Base de Dados Local:** Persistência de dados utilizando `LocalStorage` (funciona offline).
-  * **Importação em Massa:** Suporte a arquivos Excel (`.xlsx`, `.xls`), CSV e JSON para cadastro de turmas inteiras.
-  * **Histórico Inteligente:** Busca, filtros por período e edição de registros passados.
-  * **Exportação Oficial:** Geração de arquivos `.txt` formatados para registros oficiais (padrão Siges/Siga).
-  * **Cópia Rápida:** Botão para copiar a lista de presentes para a área de transferência (útil para WhatsApp/Teams).
+### 📅 Gestão de Presença
+* **Listas de Entrada e Saída:** Controle separado por tipo de registro.
+* **Salvamento Inteligente (Upsert):** O sistema detecta se já existe uma lista para o mesmo dia/turma e atualiza o registro existente em vez de criar duplicatas.
+* **Seleção Ágil:** Botões para "Selecionar Todos" e "Inverter Seleção", além de permitir marcar clicando em qualquer lugar da linha do aluno.
+
+### 🖨️ Impressão e Documentação
+* **Gerador de PDF Oficial:** Cria listas de presença formatadas para impressão (orientação paisagem), contendo:
+    * Cabeçalho padrão com logos do CPS e Governo de SP.
+    * Dados da turma, data e contagem de alunos.
+    * Linhas dimensionadas para assinatura manual dos alunos.
+* **Exportação SIGA:** Gera arquivos `.txt` formatados para importação ou conferência no sistema acadêmico.
+
+### 💾 Base de Dados (Local)
+* **Persistência Offline:** Dados salvos no `LocalStorage` do navegador.
+* **Importação em Massa:** Suporte a arquivos Excel (`.xlsx`, `.xls`), CSV e JSON.
+* **Cadastro Manual:** Formulário para adicionar alunos individualmente com validação de RA duplicado.
+
+### 🕰️ Histórico e Auditoria
+* **Histórico Detalhado:** Busca e filtros por período.
+* **Logs de Alteração:** O sistema registra a data e hora de criação e de cada edição realizada em uma lista.
+* **Edição Póstuma:** Permite corrigir presenças em listas já salvas através de uma interface modal dedicada.
 
 ## 🛠 Tecnologias Utilizadas
 
-  * **HTML5 & CSS3:** Semântico e responsivo.
-  * **JavaScript (ES6+):** Lógica pura, estruturada no padrão MVC.
-  * **SheetJS (XLSX):** Biblioteca para leitura e processamento de planilhas.
-  * **FontAwesome:** Ícones para interface de usuário.
+* **HTML5 & CSS3:** Design responsivo (Mobile First) e semântico.
+* **JavaScript (ES6+):** Lógica pura, estruturada no padrão MVC.
+* **SheetJS (XLSX):** Leitura e processamento de planilhas.
+* **jsPDF & AutoTable:** Geração de documentos PDF dinâmicos no navegador.
+* **FontAwesome:** Ícones de interface.
 
 ## 📁 Estrutura do Projeto
 
-O projeto foi refatorado para separar responsabilidades:
-
 ```text
-/chamada/
+/sistema-chamada/
 │
-├── index.html           # Estrutura e Interface Principal
-├── README.md            # Documentação do Projeto
+├── index.html           # Interface Principal (Single Page)
+├── README.md            # Documentação
 │
 └── assets/
     ├── css/
     │   └── style.css    # Estilização (Identidade Visual CPS)
     │
     ├── js/
-    │   ├── model.js     # Regras de Negócio e Dados (LocalStorage)
-    │   ├── view.js      # Manipulação do DOM e Interface
-    │   └── controller.js # Gerenciamento de Eventos e fluxo
+    │   ├── model.js     # Regras de Negócio, Dados e Logs
+    │   ├── view.js      # Manipulação do DOM, Modais e PDF
+    │   └── controller.js # Gerenciamento de Eventos
     │
     └── img/
         ├── logo_cps.png       # Logo Institucional
@@ -46,7 +60,7 @@ O projeto foi refatorado para separar responsabilidades:
 
 ## 🎨 Identidade Visual
 
-O design segue as diretrizes oficiais do Centro Paula Souza:
+O design respeita as diretrizes do Centro Paula Souza:
 
   * **Tipografia:** Fonte **Verdana** (Padrão de sistema oficial).
   * **Cromia Principal:** Vermelho Institucional `#B20000` (Convertido de CMYK 0/100/100/30).
@@ -54,43 +68,35 @@ O design segue as diretrizes oficiais do Centro Paula Souza:
 
 ## 📦 Como Usar
 
-### 1\. Instalação
+### 1\. Configuração Inicial (Base de Alunos)
 
-Não é necessária instalação complexa. Apenas faça o download dos arquivos e abra o `index.html` em qualquer navegador moderno.
+1.  Acesse a aba **"Gestão de Alunos"**.
+2.  **Opção A (Em Massa):** Importe uma planilha (`.xlsx` ou `.csv`) com colunas como `RA`, `NOME`, `CURSO`, `PERIODO`.
+3.  **Opção B (Manual):** Utilize o formulário "Novo Aluno" para cadastrar estudantes individualmente.
 
-### 2\. Configuração Inicial (Base de Alunos)
+### 2\. Realizando a Chamada
 
-1.  Vá até a aba **"Gestão de Alunos"**.
-2.  Importe uma planilha (`.xlsx` ou `.csv`).
-3.  **Formato Aceito:** O sistema é flexível e busca colunas com nomes similares a:
-      * `RA` ou `Matricula`
-      * `NOME` ou `Aluno`
-      * `CURSO`
-      * `PERIODO` ou `Turma`
+1.  Na aba **"Realizar Chamada"**, defina a Data, Curso, Período e Tipo.
+2.  Marque os alunos presentes.
+3.  Clique em **Salvar / Atualizar Lista**.
+      * *Nota:* Se a lista já existir, o sistema atualizará o registro e gravará um log da alteração.
 
-Exemplo de CSV para teste:
+### 3\. Histórico e Edição
 
-```csv
-RA,NOME,CURSO,PERIODO
-101010,Maria Silva,DSM,1
-101011,João Souza,DSM,1
-101012,Ana Pereira,GE,3
-```
+1.  Vá para a aba **"Histórico"**.
+2.  Utilize os botões de ação em cada registro:
+      * 👁️ **Ver:** Exibe detalhes e o log de alterações (quem criou, quando editou).
+      * ✏️ **Editar:** Abre uma janela para alterar as presenças daquela lista específica.
+      * ⬇️ **Baixar:** Download do arquivo `.txt`.
+      * 🗑️ **Excluir:** Remove o registro permanentemente.
 
-### 3\. Realizando a Chamada
+### 4\. Impressão (PDF)
 
-1.  Na aba **"Realizar Chamada"**, selecione a Data.
-2.  Escolha o **Curso** e o **Período** (os alunos aparecerão automaticamente).
-3.  Marque os presentes (ou use "Selecionar Todos").
-4.  Clique em **Salvar Lista**.
-
-### 4\. Histórico
-
-  * Acesse a aba **"Histórico"** para ver as listas salvas.
-  * Use os filtros para encontrar datas específicas.
-  * Você pode baixar o `.txt` ou excluir registros errados.
-  * **Dica:** Clique na etiqueta "Entrada" ou "Saída" para alterar o tipo da lista caso tenha salvo errado.
+1.  Acesse a aba **"Imprimir"**.
+2.  Escolha a Data e o Tipo da lista.
+3.  Selecione "Todas as Turmas" ou uma turma específica.
+4.  Clique em **Gerar PDF**. Um arquivo pronto para impressão será baixado.
 
 -----
 
-**Desenvolvido para otimização da gestão acadêmica.**
+**Desenvolvido para a Fatec Registro.**
